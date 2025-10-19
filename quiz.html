@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMT Finance Knowledge Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: #0a0e1a;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(26, 85, 255, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(26, 85, 255, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(10, 50, 150, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 30, 50, 0.9) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(26, 85, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1a55ff 0%, #0a3fdd 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .logo-text {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            color: #6b8cff;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.2em;
+            margin-bottom: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #8a9bb3;
+            font-size: 1.05em;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: rgba(15, 20, 35, 0.95);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(26, 85, 255, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .progress-value {
+            color: #1a55ff;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .progress-label {
+            color: #6b7f9f;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .quiz-card {
+            background: linear-gradient(135deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 30, 50, 0.9) 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(26, 85, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .quiz-card.active {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(26, 85, 255, 0.15);
+        }
+
+        .question-number {
+            color: #1a55ff;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .question-category {
+            color: #6b8cff;
+            font-size: 0.8em;
+            padding: 6px 14px;
+            background: rgba(26, 85, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(26, 85, 255, 0.2);
+        }
+
+        .question {
+            color: #ffffff;
+            font-size: 1.4em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option {
+            background: rgba(20, 30, 50, 0.5);
+            border: 1.5px solid rgba(26, 85, 255, 0.2);
+            border-radius: 10px;
+            padding: 18px 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #c5d3e8;
+            font-size: 1.05em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-label {
+            color: #1a55ff;
+            font-weight: 700;
+            min-width: 28px;
+        }
+
+        .option:hover {
+            background: rgba(26, 85, 255, 0.1);
+            border-color: #1a55ff;
+            transform: translateX(4px);
+        }
+
+        .option.selected {
+            background: rgba(26, 85, 255, 0.15);
+            border-color: #1a55ff;
+            border-width: 2px;
+        }
+
+        .option.correct {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            border-width: 2px;
+        }
+
+        .option.incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            border-width: 2px;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #1a55ff 0%, #0a3fdd 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px 40px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(26, 85, 255, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .next-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(26, 85, 255, 0.5);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            text-align: center;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 30, 50, 0.9) 100%);
+            border-radius: 16px;
+            padding: 50px 40px;
+            border: 1px solid rgba(26, 85, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a55ff 0%, #0a3fdd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            box-shadow: 0 8px 30px rgba(26, 85, 255, 0.4);
+        }
+
+        .score {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: white;
+        }
+
+        .result-title {
+            color: #ffffff;
+            font-size: 2em;
+            margin: 25px 0 15px;
+            font-weight: 600;
+        }
+
+        .result-message {
+            color: #8a9bb3;
+            font-size: 1.15em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .performance-breakdown {
+            background: rgba(20, 30, 50, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid rgba(26, 85, 255, 0.15);
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(26, 85, 255, 0.1);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            color: #8a9bb3;
+            font-size: 0.95em;
+        }
+
+        .breakdown-value {
+            color: #1a55ff;
+            font-weight: 600;
+        }
+
+        .social-share {
+            background: rgba(26, 85, 255, 0.08);
+            border: 1px solid rgba(26, 85, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            color: #c5d3e8;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .share-title {
+            color: #1a55ff;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .restart-btn {
+            background: transparent;
+            color: #1a55ff;
+            border: 2px solid #1a55ff;
+            border-radius: 10px;
+            padding: 14px 35px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: rgba(26, 85, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 35px 25px;
+            }
+            
+            h1 {
+                font-size: 1.7em;
+            }
+            
+            .question {
+                font-size: 1.2em;
+            }
+            
+            .quiz-card {
+                padding: 30px 25px;
+            }
+
+            .progress-bar {
+                padding: 15px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">Momentum</div>
+            </div>
+            <div class="tagline">Financial Operating System</div>
+            <h1>Knowledge Assessment</h1>
+            <p class="subtitle">Test your understanding of the tokenized financial infrastructure powering the future of global finance.</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-item">
+                <div class="progress-value" id="current-question">1</div>
+                <div class="progress-label">Question</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-value" id="score-display">0</div>
+                <div class="progress-label">Correct</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-value">8</div>
+                <div class="progress-label">Total</div>
+            </div>
+        </div>
+
+        <div id="quiz-container"></div>
+
+        <div class="results" id="results">
+            <div class="results-card">
+                <h2 class="result-title">Assessment Complete</h2>
+                <div class="score-circle">
+                    <div class="score" id="final-score">0/8</div>
+                </div>
+                <div class="result-message" id="result-text"></div>
+                
+                <div class="performance-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Questions Answered</span>
+                        <span class="breakdown-value">8</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Correct Answers</span>
+                        <span class="breakdown-value" id="correct-count">0</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Accuracy Rate</span>
+                        <span class="breakdown-value" id="accuracy-rate">0%</span>
+                    </div>
+                </div>
+
+                <div class="social-share">
+                    <div class="share-title">💠 Share Your Results</div>
+                    How did you score? Share your results and tag @MMTFinance to show your DeFi IQ.<br><br>
+                    <strong>The future is tokenized.</strong>
+                </div>
+                
+                <button class="restart-btn" onclick="restartQuiz()">Retake Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 4 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        const quizData = [
+            {
+                question: "What is MMT Finance designed to be?",
+                category: "Core Concept",
+                options: [
+                    "A traditional centralized exchange",
+                    "A financial operating system for tokenized assets",
+                    "A blockchain network",
+                    "A payment processing platform"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which blockchain network powers MMT Finance?",
+                category: "Infrastructure",
+                options: [
+                    "Ethereum",
+                    "Solana",
+                    "Sui Network",
+                    "Avalanche"
+                ],
+                correct: 2
+            },
+            {
+                question: "What does CLMM stand for in MMT's technology?",
+                category: "Technology",
+                options: [
+                    "Central Liquidity Market Model",
+                    "Concentrated Liquidity Market Maker",
+                    "Cross-Layer Market Mechanism",
+                    "Continuous Liquidity Mining Method"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the primary advantage of CLMM for liquidity providers?",
+                category: "Technology",
+                options: [
+                    "Guaranteed returns with no risk",
+                    "Ability to concentrate liquidity in specific price ranges for greater capital efficiency",
+                    "Automatic token airdrops",
+                    "Free transaction fees"
+                ],
+                correct: 1
+            },
+            {
+                question: "What tokenomics model does MMT Finance implement?",
+                category: "Tokenomics",
+                options: [
+                    "Proof of Work",
+                    "ve(3,3) model that rewards long-term holders and governance participation",
+                    "Deflationary burn mechanism only",
+                    "Fixed supply with no rewards"
+                ],
+                correct: 1
+            },
+            {
+                question: "What are 'Bricks' in the MMT ecosystem?",
+                category: "Tokenomics",
+                options: [
+                    "NFT collectibles",
+                    "Points earned by early contributors that convert to $MMT tokens",
+                    "Staking rewards",
+                    "Transaction fees"
+                ],
+                correct: 1
+            },
+            {
+                question: "Why is Sui Network well-suited for DeFi applications like MMT?",
+                category: "Infrastructure",
+                options: [
+                    "It's the oldest blockchain",
+                    "It offers parallel transaction execution with low fees and high throughput",
+                    "It requires no gas fees",
+                    "It's centrally controlled"
+                ],
+                correct: 1
+            },
+            {
+                question: "By 2030, what role could MMT Finance play in the tokenized economy?",
+                category: "Vision",
+                options: [
+                    "Replace all traditional banks worldwide",
+                    "Serve as core infrastructure connecting tokenized assets across real estate, securities, and commodities",
+                    "Become a social media platform",
+                    "Focus exclusively on NFT trading"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                if (index === 0) card.classList.add('active');
+                
+                card.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">Question ${index + 1} of ${quizData.length}</div>
+                        <div class="question-category">${q.category}</div>
+                    </div>
+                    <div class="question">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((option, i) => `
+                            <div class="option" data-index="${i}" onclick="selectAnswer(${index}, ${i})">
+                                <span class="option-label">${String.fromCharCode(65 + i)}</span>
+                                <span>${option}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="next-btn" id="next-btn-${index}" onclick="nextQuestion()" disabled>
+                        ${index === quizData.length - 1 ? 'View Results' : 'Continue'}
+                    </button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function selectAnswer(questionIndex, answerIndex) {
+            if (questionIndex !== currentQuestion) return;
+            
+            const options = document.querySelectorAll('.quiz-card.active .option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            options[answerIndex].classList.add('selected');
+            selectedAnswer = answerIndex;
+            
+            document.getElementById(`next-btn-${questionIndex}`).disabled = false;
+        }
+
+        function nextQuestion() {
+            const options = document.querySelectorAll('.quiz-card.active .option');
+            const correctAnswer = quizData[currentQuestion].correct;
+            
+            options.forEach((opt, i) => {
+                if (i === correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (i === selectedAnswer && i !== correctAnswer) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer === correctAnswer) {
+                score++;
+                document.getElementById('score-display').textContent = score;
+            }
+
+            setTimeout(() => {
+                if (currentQuestion < quizData.length - 1) {
+                    document.querySelectorAll('.quiz-card')[currentQuestion].classList.remove('active');
+                    currentQuestion++;
+                    document.querySelectorAll('.quiz-card')[currentQuestion].classList.add('active');
+                    document.getElementById('current-question').textContent = currentQuestion + 1;
+                    selectedAnswer = null;
+                } else {
+                    showResults();
+                }
+            }, 1800);
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+            document.getElementById('final-score').textContent = `${score}/${quizData.length}`;
+            document.getElementById('correct-count').textContent = score;
+            
+            const accuracy = Math.round((score / quizData.length) * 100);
+            document.getElementById('accuracy-rate').textContent = accuracy + '%';
+            
+            let message = '';
+            if (score === quizData.length) {
+                message = "Exceptional performance. You demonstrate comprehensive understanding of tokenized financial infrastructure.";
+            } else if (score >= 6) {
+                message = "Strong knowledge demonstrated. You understand the core principles of MMT Finance and the tokenized future.";
+            } else if (score >= 4) {
+                message = "Solid foundation. Continue exploring DeFi infrastructure to deepen your understanding of tokenized finance.";
+            } else {
+                message = "Consider reviewing the fundamentals of CLMM, ve(3,3) tokenomics, and the Sui Network ecosystem.";
+            }
+            
+            document.getElementById('result-text').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            document.getElementById('score-display').textContent = '0';
+            document.getElementById('current-question').textContent = '1';
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('quiz-container').style.display = 'block';
+            renderQuiz();
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
